@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brain Spark IQ</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&amp;family=Quicksand:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>@view-transition { navigation: auto; }</style>
+ </head>
+ <body class="h-full font-body">
+  <div id="app" class="h-full w-full overflow-auto bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900"><!-- Animated Background -->
+   <div class="fixed inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute top-20 left-10 w-32 h-32 rounded-full bg-emerald-500/10 blur-3xl animate-float"></div>
+    <div class="absolute bottom-20 right-10 w-40 h-40 rounded-full bg-cyan-500/10 blur-3xl animate-float" style="animation-delay: -2s;"></div>
+    <div class="absolute top-1/2 left-1/2 w-60 h-60 rounded-full bg-violet-500/5 blur-3xl animate-float" style="animation-delay: -4s;"></div>
+   </div><!-- Start Screen -->
+   <div id="start-screen" class="relative min-h-full flex flex-col items-center justify-center p-6">
+    <div class="text-center max-w-lg"><!-- Brain Icon -->
+     <div class="mb-8 animate-brain-pulse">
+      <svg class="w-32 h-32 mx-auto text-emerald-400" viewbox="0 0 100 100" fill="none"><defs>
+        <lineargradient id="brain-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+         <stop offset="0%" style="stop-color:#00ff88" />
+         <stop offset="100%" style="stop-color:#00d4ff" />
+        </lineargradient>
+       </defs> <path d="M50 10 C30 10 20 25 20 40 C20 50 25 55 20 65 C15 75 25 90 40 90 C45 90 48 85 50 85 C52 85 55 90 60 90 C75 90 85 75 80 65 C75 55 80 50 80 40 C80 25 70 10 50 10" stroke="url(#brain-grad)" stroke-width="3" fill="none" /> <path d="M35 30 Q40 35 35 45 Q30 55 40 65" stroke="url(#brain-grad)" stroke-width="2" fill="none" /> <path d="M50 25 L50 75" stroke="url(#brain-grad)" stroke-width="2" fill="none" /> <path d="M65 30 Q60 35 65 45 Q70 55 60 65" stroke="url(#brain-grad)" stroke-width="2" fill="none" /> <circle cx="35" cy="40" r="4" fill="#00ff88" opacity="0.8" /> <circle cx="65" cy="40" r="4" fill="#00d4ff" opacity="0.8" /> <circle cx="50" cy="55" r="3" fill="#00ff88" opacity="0.6" />
+      </svg>
+     </div>
+     <h1 id="title-display" class="font-display text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-400 to-emerald-400 mb-4 neon-text">Brain Spark IQ</h1>
+     <p class="text-slate-400 text-lg mb-8">Challenge your mind with 20 brain-bending questions across multiple categories. Discover your cognitive potential!</p><!-- Stats Preview -->
+     <div class="grid grid-cols-3 gap-4 mb-8">
+      <div class="glass-card rounded-xl p-4">
+       <div class="text-2xl font-display text-emerald-400">
+        🎨
+       </div>
+       <div class="text-xs text-slate-400 mt-1">
+        Art
+       </div>
+      </div>
+      <div class="glass-card rounded-xl p-4">
+       <div class="text-2xl font-display text-cyan-400">
+        🧩
+       </div>
+       <div class="text-xs text-slate-400 mt-1">
+        Logic
+       </div>
+      </div>
+      <div class="glass-card rounded-xl p-4">
+       <div class="text-2xl font-display text-violet-400">
+        🔢
+       </div>
+       <div class="text-xs text-slate-400 mt-1">
+        Math
+       </div>
+      </div>
+     </div><button id="start-btn" onclick="showCategorySelection()" class="relative px-12 py-4 bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-900 font-display font-bold text-xl rounded-2xl animate-pulse-glow hover:scale-105 transition-transform duration-300"> <span id="start-btn-text">Begin Test</span>
+      <svg class="inline-block ml-2 w-6 h-6" fill="none" viewbox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+      </svg></button> <!-- Previous Results -->
+     <div id="prev-results" class="mt-8 hidden">
+      <p class="text-slate-500 text-sm mb-2">Your Best Score</p>
+      <div class="glass-card rounded-xl p-4 inline-block"><span id="best-iq" class="font-display text-3xl text-emerald-400">--</span> <span class="text-slate-400 text-sm ml-1">IQ</span>
+      </div>
+     </div>
+    </div>
+   </div><!-- Category Selection Screen -->
+   <div id="category-screen" class="relative min-h-full hidden flex-col items-center justify-center p-6">
+    <div class="text-center max-w-3xl w-full">
+     <h2 class="font-display text-4xl md:text-5xl font-black text-white mb-3">Choose Your Categories</h2>
+     <p class="text-slate-400 text-lg mb-2">Select 1 to 4 categories to test your skills</p>
+     <p class="text-emerald-400 text-sm mb-8">Tap to select • <span id="selected-count">0</span> selected</p><!-- Category Grid -->
+     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8"><!-- Art --> <button onclick="toggleCategory('art')" id="cat-art" class="category-card glass-card rounded-2xl p-6 transition-all duration-300 hover:scale-105 cursor-pointer">
+       <div class="text-5xl mb-3">
+        🎨
+       </div>
+       <div class="font-display text-lg text-white mb-1">
+        Art
+       </div>
+       <div class="text-xs text-slate-400">
+        Interpret patterns
+       </div>
+       <div class="category-check hidden mt-3">
+        <svg class="w-8 h-8 mx-auto text-emerald-400" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+        </svg>
+       </div></button> <!-- Logic --> <button onclick="toggleCategory('logic')" id="cat-logic" class="category-card glass-card rounded-2xl p-6 transition-all duration-300 hover:scale-105 cursor-pointer">
+       <div class="text-5xl mb-3">
+        🧩
+       </div>
+       <div class="font-display text-lg text-white mb-1">
+        Logic
+       </div>
+       <div class="text-xs text-slate-400">
+        Solve puzzles
+       </div>
+       <div class="category-check hidden mt-3">
+        <svg class="w-8 h-8 mx-auto text-emerald-400" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+        </svg>
+       </div></button> <!-- Math --> <button onclick="toggleCategory('math')" id="cat-math" class="category-card glass-card rounded-2xl p-6 transition-all duration-300 hover:scale-105 cursor-pointer">
+       <div class="text-5xl mb-3">
+        🔢
+       </div>
+       <div class="font-display text-lg text-white mb-1">
+        Math
+       </div>
+       <div class="text-xs text-slate-400">
+        Calculate answers
+       </div>
+       <div class="category-check hidden mt-3">
+        <svg class="w-8 h-8 mx-auto text-emerald-400" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+        </svg>
+       </div></button> <!-- Spatial --> <button onclick="toggleCategory('spatial')" id="cat-spatial" class="category-card glass-card rounded-2xl p-6 transition-all duration-300 hover:scale-105 cursor-pointer">
+       <div class="text-5xl mb-3">
+        📐
+       </div>
+       <div class="font-display text-lg text-white mb-1">
+        Spatial
+       </div>
+       <div class="text-xs text-slate-400">
+        Visualize shapes
+       </div>
+       <div class="category-check hidden mt-3">
+        <svg class="w-8 h-8 mx-auto text-emerald-400" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+        </svg>
+       </div></button> <!-- Pattern --> <button onclick="toggleCategory('pattern')" id="cat-pattern" class="category-card glass-card rounded-2xl p-6 transition-all duration-300 hover:scale-105 cursor-pointer">
+       <div class="text-5xl mb-3">
+        🔄
+       </div>
+       <div class="font-display text-lg text-white mb-1">
+        Patterns
+       </div>
+       <div class="text-xs text-slate-400">
+        Find sequences
+       </div>
+       <div class="category-check hidden mt-3">
+        <svg class="w-8 h-8 mx-auto text-emerald-400" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+        </svg>
+       </div></button> <!-- Verbal --> <button onclick="toggleCategory('verbal')" id="cat-verbal" class="category-card glass-card rounded-2xl p-6 transition-all duration-300 hover:scale-105 cursor-pointer">
+       <div class="text-5xl mb-3">
+        📝
+       </div>
+       <div class="font-display text-lg text-white mb-1">
+        Verbal
+       </div>
+       <div class="text-xs text-slate-400">
+        Word reasoning
+       </div>
+       <div class="category-check hidden mt-3">
+        <svg class="w-8 h-8 mx-auto text-emerald-400" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+        </svg>
+       </div></button> <!-- Memory --> <button onclick="toggleCategory('memory')" id="cat-memory" class="category-card glass-card rounded-2xl p-6 transition-all duration-300 hover:scale-105 cursor-pointer">
+       <div class="text-5xl mb-3">
+        🧠
+       </div>
+       <div class="font-display text-lg text-white mb-1">
+        Memory
+       </div>
+       <div class="text-xs text-slate-400">
+        Recall info
+       </div>
+       <div class="category-check hidden mt-3">
+        <svg class="w-8 h-8 mx-auto text-emerald-400" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+        </svg>
+       </div></button>
+     </div><!-- Action Buttons -->
+     <div class="flex gap-4 justify-center"><button onclick="backToStart()" class="px-8 py-3 glass-card rounded-xl text-slate-300 font-display hover:text-white transition-colors"> ← Back </button> <button id="continue-btn" onclick="startTestWithCategories()" disabled class="px-12 py-3 bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-900 font-display font-bold text-lg rounded-xl hover:scale-105 transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100"> Continue 
+       <svg class="inline-block ml-2 w-5 h-5" fill="none" viewbox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+       </svg></button>
+     </div>
+    </div>
+   </div><!-- Quiz Screen -->
+   <div id="quiz-screen" class="relative min-h-full hidden flex-col p-4 md:p-6"><!-- Top Bar -->
+    <div class="flex items-center justify-between mb-6"><!-- Timer -->
+     <div class="relative w-16 h-16">
+      <svg class="w-full h-full transform -rotate-90"><circle cx="32" cy="32" r="28" stroke="#1e293b" stroke-width="4" fill="none" /> <circle id="timer-circle" class="timer-ring" cx="32" cy="32" r="28" stroke="url(#timer-grad)" stroke-width="4" fill="none" stroke-linecap="round" /> <defs>
+        <lineargradient id="timer-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+         <stop offset="0%" style="stop-color:#00ff88" />
+         <stop offset="100%" style="stop-color:#00d4ff" />
+        </lineargradient>
+       </defs>
+      </svg>
+      <div class="absolute inset-0 flex items-center justify-center"><span id="timer-text" class="font-display text-lg text-emerald-400">30</span>
+      </div>
+     </div><!-- Progress -->
+     <div class="flex-1 mx-4">
+      <div class="flex justify-between text-sm mb-1"><span class="text-slate-400">Question <span id="q-num" class="text-emerald-400 font-display">1</span>/20</span> <span id="streak-display" class="text-orange-400 hidden">🔥 <span id="streak-count">0</span> streak!</span>
+      </div>
+      <div class="h-3 bg-slate-800 rounded-full overflow-hidden relative">
+       <div id="progress-bar" class="progress-bar h-full bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-full transition-all duration-500 relative" style="width: 5%"></div>
+      </div>
+     </div><!-- Score -->
+     <div class="glass-card rounded-xl px-4 py-2"><span class="text-xs text-slate-400 block">Score</span> <span id="score-display" class="font-display text-xl text-emerald-400">0</span>
+     </div>
+    </div><!-- Question Card -->
+    <div class="flex-1 flex items-center justify-center">
+     <div class="w-full max-w-2xl"><!-- Category Badge -->
+      <div id="category-badge" class="inline-flex items-center gap-2 glass-card rounded-full px-4 py-1 mb-4"><span id="category-icon">🧩</span> <span id="category-text" class="text-sm text-slate-300">Logic</span> <span id="difficulty-badge" class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400">Easy</span>
+      </div><!-- Question -->
+      <div class="glass-card rounded-3xl p-6 md:p-8 animate-slide-up">
+       <h2 id="question-text" class="text-xl md:text-2xl text-white font-semibold mb-8 leading-relaxed">Loading question...</h2><!-- Visual Area (for pattern questions) -->
+       <div id="visual-area" class="hidden mb-8 flex justify-center">
+        <div id="visual-content" class="glass-card rounded-xl p-6"></div>
+       </div><!-- Options -->
+       <div id="options-container" class="grid gap-3"><!-- Options rendered here -->
+       </div>
+      </div><!-- Hint Button -->
+      <div class="mt-4 text-center"><button id="hint-btn" onclick="useHint()" class="text-slate-500 hover:text-emerald-400 transition-colors text-sm"> 💡 Use Hint (<span id="hints-left">3</span> left) </button>
+      </div>
+     </div>
+    </div>
+   </div><!-- Results Screen -->
+   <div id="results-screen" class="relative min-h-full hidden flex-col items-center justify-center p-6">
+    <div id="confetti-container"></div>
+    <div class="text-center max-w-lg animate-slide-up"><!-- IQ Circle -->
+     <div class="relative w-48 h-48 mx-auto mb-8">
+      <svg class="w-full h-full" viewbox="0 0 200 200"><defs>
+        <lineargradient id="score-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+         <stop offset="0%" style="stop-color:#00ff88" />
+         <stop offset="50%" style="stop-color:#00d4ff" />
+         <stop offset="100%" style="stop-color:#8b5cf6" />
+        </lineargradient>
+       </defs> <circle cx="100" cy="100" r="90" stroke="#1e293b" stroke-width="12" fill="none" /> <circle id="score-ring" cx="100" cy="100" r="90" stroke="url(#score-grad)" stroke-width="12" fill="none" stroke-linecap="round" stroke-dasharray="565" stroke-dashoffset="565" transform="rotate(-90 100 100)" style="transition: stroke-dashoffset 2s ease-out" />
+      </svg>
+      <div class="absolute inset-0 flex flex-col items-center justify-center"><span id="iq-score" class="font-display text-5xl text-white">0</span> <span id="results-title-text" class="text-slate-400 text-sm">Your IQ Score</span>
+      </div>
+     </div><!-- Rating -->
+     <div id="rating-badge" class="inline-block glass-card rounded-full px-6 py-2 mb-6"><span id="rating-text" class="font-display text-lg text-emerald-400">Calculating...</span>
+     </div><!-- Stats Grid -->
+     <div class="grid grid-cols-2 gap-4 mb-8">
+      <div class="glass-card rounded-xl p-4">
+       <div class="text-3xl font-display text-emerald-400" id="correct-count">
+        0
+       </div>
+       <div class="text-xs text-slate-400">
+        Correct
+       </div>
+      </div>
+      <div class="glass-card rounded-xl p-4">
+       <div class="text-3xl font-display text-cyan-400" id="avg-time">
+        0s
+       </div>
+       <div class="text-xs text-slate-400">
+        Avg Time
+       </div>
+      </div>
+      <div class="glass-card rounded-xl p-4">
+       <div class="text-3xl font-display text-violet-400" id="accuracy">
+        0%
+       </div>
+       <div class="text-xs text-slate-400">
+        Accuracy
+       </div>
+      </div>
+      <div class="glass-card rounded-xl p-4">
+       <div class="text-3xl font-display text-orange-400" id="max-streak">
+        0
+       </div>
+       <div class="text-xs text-slate-400">
+        Best Streak
+       </div>
+      </div>
+     </div><!-- Percentile -->
+     <div class="glass-card rounded-xl p-4 mb-8">
+      <p class="text-slate-400 text-sm">You scored higher than</p>
+      <p class="font-display text-3xl text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400" id="percentile">0%</p>
+      <p class="text-slate-400 text-sm">of the population</p>
+     </div><!-- Actions -->
+     <div class="flex gap-4 justify-center"><button onclick="restartTest()" class="px-8 py-3 bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-900 font-display font-bold rounded-xl hover:scale-105 transition-transform"> Try Again </button>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <!-- External Scripts -->
+  <script src="questions.js"></script>
+  <script src="game.js"></script>
+  <!-- Developed by Big Sam -->
+ </body>
+</html>
