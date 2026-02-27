@@ -56,9 +56,31 @@ You can customize the app using the SDK integration:
 - Chrome/Edge/Firefox (latest)
 - Safari 9+ (with prefix support)
 
+## 🔗 Connect With Me
+<p>
+  <a href="https://github.com/devbigsam">
+    <img src="https://img.shields.io/badge/GitHub-181717?logo=github&logoColor=white" />
+  </a>
+  <a href="mailto:samueldubuisi54@gmail.com">
+    <img src="https://img.shields.io/badge/Email-D14836?logo=gmail&logoColor=white" />
+  </a>
+  <a href="https://devbigsam.site">
+    <img src="https://img.shields.io/badge/Portfolio-0EA5E9?logo=vercel&logoColor=white" />
+  </a>
+  <a href="https://t.me/devbigsam">
+    <img src="https://img.shields.io/badge/Telegram-26A5E4?logo=telegram&logoColor=white" />
+  </a>
+  <a href="https://discord.gg/FjeXcnBg">
+    <img src="https://img.shields.io/badge/Discord-5865F2?logo=discord&logoColor=white" />
+  </a>
+  <a href="https://twitter.com/devbigsam">
+    <img src="https://img.shields.io/badge/Twitter-1DA1F2?logo=twitter&logoColor=white" />
+  </a>
+</p>
+
 ## License
 
-See LICENSE file for details.
+See (LICENSE)[https://github.com/devbigsam/IQ-Test?tab=License-1-ov-file#] file for details.
 
 ---
 
