@@ -80,7 +80,7 @@ You can customize the app using the SDK integration:
 
 ## License
 
-See (LICENSE)[https://github.com/devbigsam/IQ-Test?tab=License-1-ov-file#] file for details.
+See [LICENSE](./LICENSE) file for details.
 
 ---
 
